@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="CyberLinkApi.js"></script>
+		<script type="text/javascript">
+			
+
+			window.onload = function(){
+				var btn = document.getElementById('btn');
+				var zhuanzhang = document.getElementById('zhuanzhang');
+				
+				btn.onclick = function(){
+					walletInitFunc.walletPlugin(
+				        "getAddressInfo",
+				        {},
+				        function(res) {
+				            console.log("getAddressInfo", res)
+				        },
+				        function(err) {
+				            console.error(err)
+				        }
+				   );
+				}
+				
+				
+				
+				zhuanzhang.onclick = function(){
+					var amount = document.getElementById('number').value;
+					amount = amount * 100000000;
+					var collectionAddress = document.getElementById('address').value;
+					console.log(amount,collectionAddress)
+					
+					walletInitFunc.walletPlugin(
+				        "walletPluginTransfer",
+				        {
+				          amount: amount, 
+				          collectionAddress: collectionAddress,
+				          remark: "备注"
+				        },
+				        function(res) {
+				          console.log("walletPluginTransfer", res)
+				        },
+				        function(err) {
+				          console.error(err)
+				        }
+				    );
+				}
+				
+				
+				
+			}
+			
+		</script>
+	</head>
+	<body>
+		<input type="button" name="btn" id="btn" value="获取用户信息" />
+		<br />
+		<br />
+		<br />
+		<input type="number" name="number" id="number" value="0.01" />
+		<input type="text" name="address" id="address" value="ESNW2RwzqNQxMZNH3ZY42646gs6F6bT5q3" />
+		<input type="button" name="zhuanzhang" id="zhuanzhang" value="转账" />
+	</body>
+</html>
