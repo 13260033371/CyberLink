@@ -1,5 +1,5 @@
 import BaasAPI from './baas-api'
-import WiccAPI from './wicc-api'
+import WibitApI from './wibit-api'
 import axios from "axios";
 import stateStore from './state-store'
 import vaultStorage from './storage/vault-storage'
@@ -20,8 +20,8 @@ const validateNetwork = (network) => {
   }
 }
 
-const getWiccApi = (network) => {
-  return new WiccAPI(network)
+const getWibitApi = (network) => {
+  return new WibitApI(network)
 }
 
 const getSignInfo = (network, address) => {
@@ -98,14 +98,14 @@ export default {
   async checkMnemonicCode({
     mnemonic
   }) {
-    return getWiccApi(TESTNET).checkMnemonicCode(mnemonic)
+    return getWibitApi(TESTNET).checkMnemonicCode(mnemonic)
   },
 
   async createMnemonicCode({
     network
   }) {
     validateNetwork(network)
-    return getWiccApi(network).createMnemonicCode()
+    return getWibitApi(network).createMnemonicCode()
   },
 
   async createWallet({
@@ -352,7 +352,7 @@ export default {
     address
   }) {
     const network = getAddressNetwork(address)
-    const wiccApi = getWiccApi(network)
+    const wibitApi = getWibitApi(network)
     const baasApi = new BaasAPI(network)
 
 
@@ -360,7 +360,7 @@ export default {
       .then((data) => {
         const height = data
         const privateKey = vaultStorage.getPrivateKey(address)
-        return wiccApi.createRegisterSign(privateKey, height)
+        return wibitApi.createRegisterSign(privateKey, height)
       })
       .then((sign) => {
         return baasApi.submitOfflineTrans(sign)
@@ -380,7 +380,7 @@ export default {
     fees,
     contract
   }) {
-    const wiccApi = getWiccApi(network)
+    const wibitApi = getWibitApi(network)
 
     return getSignInfo(network, address).then(({
       srcRegId,
@@ -390,7 +390,7 @@ export default {
       if (isNaN(parseFloat(value))) {
         throw new Error('INVALID_VALUE')
       }
-      return wiccApi.createContractSign(privateKey, height, srcRegId, destRegId, value, fees, contract)
+      return wibitApi.createContractSign(privateKey, height, srcRegId, destRegId, value, fees, contract)
     }).then((sign) => {
       return {
         rawtx: sign
@@ -406,7 +406,7 @@ export default {
     fees,
     contract
   }) {
-    const wiccApi = getWiccApi(network)
+    const wibitApi = getWibitApi(network)
     const baasApi = new BaasAPI(network)
 
     return getSignInfo(network, address).then(({
@@ -417,7 +417,7 @@ export default {
       if (isNaN(parseFloat(value))) {
         throw new Error('INVALID_VALUE')
       }
-      return wiccApi.createContractSign(privateKey, height, srcRegId, destRegId, value, fees, contract)
+      return wibitApi.createContractSign(privateKey, height, srcRegId, destRegId, value, fees, contract)
     }).then((sign) => {
       return baasApi.submitOfflineTrans(sign)
     }).then((value) => {
@@ -434,7 +434,7 @@ export default {
     script,
     scriptDesc
   }) {
-    const wiccApi = getWiccApi(network)
+    const wibitApi = getWibitApi(network)
     const baasApi = new BaasAPI(network)
 
     return getSignInfo(network, address).then(({
@@ -442,7 +442,7 @@ export default {
       height,
       privateKey
     }) => {
-      return wiccApi.createRegisterAppSign(privateKey, height, srcRegId, fees, script, scriptDesc)
+      return wibitApi.createRegisterAppSign(privateKey, height, srcRegId, fees, script, scriptDesc)
     }).then((sign) => {
       return {
         rawtx: sign
@@ -457,7 +457,7 @@ export default {
     script,
     scriptDesc
   }) {
-    const wiccApi = getWiccApi(network)
+    const wibitApi = getWibitApi(network)
     const baasApi = new BaasAPI(network)
 
     return getSignInfo(network, address).then(({
@@ -465,7 +465,7 @@ export default {
       height,
       privateKey
     }) => {
-      return wiccApi.createRegisterAppSign(privateKey, height, srcRegId, fees, script, scriptDesc)
+      return wibitApi.createRegisterAppSign(privateKey, height, srcRegId, fees, script, scriptDesc)
     }).then((sign) => {
       return baasApi.submitOfflineTrans(sign)
     }).then((value) => {
@@ -483,7 +483,7 @@ export default {
     fees,
     desc
   }) {
-    const wiccApi = getWiccApi(network)
+    const wibitApi = getWibitApi(network)
     const baasApi = new BaasAPI(network)
     return getSignInfo(network, address).then(({
       srcRegId,
@@ -493,7 +493,7 @@ export default {
       if (isNaN(parseFloat(value))) {
         throw new Error('INVALID_VALUE')
       }
-      return wiccApi.createTxSign(privateKey, height, srcRegId, destAddr, value, fees)
+      return wibitApi.createTxSign(privateKey, height, srcRegId, destAddr, value, fees)
     }).then((sign) => {
       return baasApi.submitOfflineTrans(sign)
     }).then((value) => {
@@ -510,7 +510,7 @@ export default {
     fees,
     desc
   }) {
-    const wiccApi = getWiccApi(network)
+    const wibitApi = getWibitApi(network)
     const baasApi = new BaasAPI(network)
     return getSignInfo(network, address).then(({
       srcRegId,
@@ -520,7 +520,7 @@ export default {
       if (isNaN(parseFloat(value))) {
         throw new Error('INVALID_VALUE')
       }
-      return wiccApi.createTxSign(privateKey, height, srcRegId, destAddr, value, fees)
+      return wibitApi.createTxSign(privateKey, height, srcRegId, destAddr, value, fees)
     }).then((sign) => {
       return {
         rawtx: sign
@@ -534,7 +534,7 @@ export default {
     votes,
     fees
   }) {
-    const wiccApi = getWiccApi(network)
+    const wibitApi = getWibitApi(network)
     const baasApi = new BaasAPI(network)
 
     votes = votes || []
@@ -561,7 +561,7 @@ export default {
       privateKey
     }) => {
       // createDelegateTxSign (privateKey, height, srcRegId, delegateData, fees)
-      return wiccApi.createDelegateTxSign(privateKey, height, srcRegId, delegateData, fees)
+      return wibitApi.createDelegateTxSign(privateKey, height, srcRegId, delegateData, fees)
     }).then((sign) => {
       return {
         rawtx: sign
@@ -575,7 +575,7 @@ export default {
     votes,
     fees
   }) {
-    const wiccApi = getWiccApi(network)
+    const wibitApi = getWibitApi(network)
     const baasApi = new BaasAPI(network)
 
     votes = votes || []
@@ -602,7 +602,7 @@ export default {
       privateKey
     }) => {
       // createDelegateTxSign (privateKey, height, srcRegId, delegateData, fees)
-      return wiccApi.createDelegateTxSign(privateKey, height, srcRegId, delegateData, fees)
+      return wibitApi.createDelegateTxSign(privateKey, height, srcRegId, delegateData, fees)
     }).then((sign) => {
       return baasApi.submitOfflineTrans(sign)
     }).then((value) => {
@@ -662,7 +662,7 @@ export default {
     desc,
     name
   }) {
-    const wiccApi = getWiccApi(network)
+    const wibitApi = getWibitApi(network)
     const baasApi = new BaasAPI(network)
 
     return getSignInfo(network, address).then(({
@@ -671,7 +671,7 @@ export default {
       privateKey
     }) => {
       const contract = getSendTokenContract(destAddress, amount * Math.pow(10, 8))
-      return wiccApi.createContractSign(privateKey, height, srcRegId, regId, 0, fees, contract)
+      return wibitApi.createContractSign(privateKey, height, srcRegId, regId, 0, fees, contract)
     }).then((sign) => {
       return baasApi.submitOfflineTrans(sign)
     }).then((txObject) => {

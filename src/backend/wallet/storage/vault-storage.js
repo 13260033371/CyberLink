@@ -1,5 +1,5 @@
 import * as passworder from 'browser-passworder'
-import WiccAPI from '../wicc-api'
+import WibitAPI from '../wibit-api'
 import * as uuidv4 from 'uuid/v4'
 import * as bitcore from 'bitcore-lib'
 import { getAddressNetwork, getPrivateKeyNetwork } from '../util/index'
@@ -20,11 +20,11 @@ const verifyExists = (type, value) => {
 
   if (type === 'privateKey') {
     const network = getPrivateKeyNetwork(value)
-    const wiccApi = new WiccAPI(network)
+    const wibitApi = new WibitAPI(network)
     const pks = []
     for (let item of data) {
       if (item.type === 'mnemonic') {
-        pks.push(wiccApi.getPrivateKeyWIFFromMnemonic(item.data.mnemonic))
+        pks.push(wibitApi.getPrivateKeyWIFFromMnemonic(item.data.mnemonic))
       }
     }
 
@@ -45,8 +45,8 @@ const verifyExists = (type, value) => {
 }
 
 const createAccountWithMnemonic = (mnemonic) => {
-  const testWiccApi = new WiccAPI('testnet')
-  const wiccApi = new WiccAPI('mainnet')
+  const testWibitApi = new WibitAPI('testnet')
+  const wibitApi = new WibitAPI('mainnet')
 
   return {
     id: uuidv4(), //v4是随机生成uuid
@@ -54,8 +54,8 @@ const createAccountWithMnemonic = (mnemonic) => {
     data: {
       mnemonic
     },
-    address: wiccApi.getAddressFromMnemonicCode(mnemonic).toString(),
-    testnetAddress: testWiccApi.getAddressFromMnemonicCode(mnemonic).toString()
+    address: wibitApi.getAddressFromMnemonicCode(mnemonic).toString(),
+    testnetAddress: testWibitApi.getAddressFromMnemonicCode(mnemonic).toString()
   }
 }
 
@@ -222,8 +222,8 @@ export default {
           return pk
         } else if (item.type === 'mnemonic') {
           const network = getAddressNetwork(address)
-          const wiccApi = new WiccAPI(network)
-          const pk = wiccApi.getPrivateKeyFromMnemonic(item.data.mnemonic) //通过助记词获取私钥
+          const wibitApi = new WibitAPI(network)
+          const pk = wibitApi.getPrivateKeyFromMnemonic(item.data.mnemonic) //通过助记词获取私钥
           privateKeyMap[address] = pk
           return pk
         }
